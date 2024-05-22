@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .error {
+            background-color: lightcoral;
+        }
+
+        .valid {
+            background-color: white;
+        }
+
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            padding-top: 50px;
+            max-width: 350px;
+            margin: 0 auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <label for="name" class="form-label">Name: </label>
+            <input type="text" id="name" onfocusout="validateName()" oninput="validateForm()" />
+        </div><br>
+        <div>
+            <label for="phone" class="form-label">Phone number</label>
+            <input type="text" id="phone" onfocusout="validatePhone()" oninput="validateForm()" />
+        </div><br>
+
+        <label>Program Time:</label> <br>
+
+        <input type="radio" name="time" value="05:00" id="time_5" checked>05:00 <br>
+        <input type="radio" name="time" value="06:00" id="time_6">06:00 <br>
+        <input type="radio" name="time" value="07:00" id="time_7">07:00 <br>
+        <input type="radio" name="time" value="08:00" id="time_8">08:00 <br>
+
+        <br>
+
+        <label>What would you like to have with us</label><br>
+        <input type="checkbox" name="Items" value="Starters">Starters <br>
+        <input type="checkbox" name="Items" value="Main Course">Main Course <br>
+        <input type="checkbox" name="Items" value="Desserts">Desserts <br>
+        <input type="checkbox" name="Items" value="Drinks">Drinks <br>
+        <br>
+
+        <button onclick="submitForm()" id="submit" disabled>Submit</button>
+        <br>
+
+        <p id="message" style="color: lightcoral;">. . .</p>
+    </div>
+    <script>
+        function validateForm() {
+            var name = document.getElementById('name').value;
+            var phone = document.getElementById('phone').value;
+            var submitButton = document.getElementById('submit');
+            var message = document.getElementById('message');
+
+            var nameValid = name && name.includes(" ");
+            var phoneValid = phone.length == 6 && /^\d/.test(phone) && /^[0-9a-zA-Z]{6}$/.test(phone);
+
+            if (!nameValid || !phoneValid) {
+                submitButton.disabled = true;
+                message.textContent = "Please fill out the form correctly.";
+            } else {
+                submitButton.disabled = false;
+                message.textContent = "";
+            }
+        }
+
+        function validateName() {
+            var name = document.getElementById('name').value;
+            var message = document.getElementById('message');
+            var nameField = document.getElementById('name');
+
+            if (name == "") {
+                message.textContent = "Error: Name is empty.";
+                nameField.classList.add('error');
+                nameField.classList.remove('valid');
+            } else if (!name.includes(" ")) {
+                message.textContent = "Error: First and last names are required.";
+                nameField.classList.add('error');
+                nameField.classList.remove('valid');
+            } else {
+                message.textContent = ". . .";
+                nameField.classList.add('valid');
+                nameField.classList.remove('error');
+            }
+        }
+
+        function validatePhone() {
+            var phone = document.getElementById('phone').value;
+            var message = document.getElementById('message');
+            var phoneField = document.getElementById('phone');
+
+            if (phone == "") {
+                message.textContent = "Error: Phone number is empty.";
+                phoneField.classList.add('error');
+                phoneField.classList.remove('valid');
+            } else if (phone.length !== 6) {
+                message.textContent = "Error: Phone numbers must have exactly 6 characters.";
+                phoneField.classList.add('error');
+                phoneField.classList.remove('valid');
+            } else if (!/^\d/.test(phone)) {
+                message.textContent = "Error: Phone number must start with numbers.";
+                phoneField.classList.add('error');
+                phoneField.classList.remove('valid');
+            } else if (!/^[0-9a-zA-Z]{6}$/.test(phone)) {
+                message.textContent = "Error: Phone number must be alphanumeric.";
+                phoneField.classList.add('error');
+                phoneField.classList.remove('valid');
+            } else {
+                message.textContent = ". . .";
+                phoneField.classList.add('valid');
+                phoneField.classList.remove('error');
+            }
+        }
+
+        function submitForm() {
+            var name = document.getElementById('name').value;
+            var phone = document.getElementById('phone').value;
+            var time = document.querySelector('input[name="time"]:checked').value;
+            var selectedItems = document.querySelectorAll('input[name="Items"]:checked');
+            var items = '';
+
+            selectedItems.forEach((item, index) => {
+                items += item.value;
+                if (index < selectedItems.length - 1) {
+                    items += ', ';
+                }
+            });
+
+            var message = name + " will attend " + time + " program and he will take " + items;
+            document.getElementById('message').innerText = message;
+        }
+
+
+
+   
+    validateForm();
+</script>
+
+
+</body>
+
+</html>
